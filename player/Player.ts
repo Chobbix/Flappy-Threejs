@@ -1,13 +1,12 @@
-import { BoxGeometry, Mesh, MeshPhongMaterial } from "three";
+import { MeshFactory } from "./MeshFactory";
 
-export class Player {
+export class Player extends MeshFactory {
     public isAlive: boolean;
     public inputJump: {
         actualPress: boolean,
         previousPress: boolean
     }
-    public cube: Mesh;
-    private jumpVelocity: number = 200;
+    private jumpVelocity: number = 5;
 
     public fallAtributes: {
         velocity: number,
@@ -40,41 +39,36 @@ export class Player {
             }
         });
 
-        player.createCube();
+        player.createPlayerMesh();
+        player.mesh.position.x = -5
+
         return player;
-    }
-    
-    private createCube() {
-        const geometry = new BoxGeometry(.5, .5, .5);
-        const material = new MeshPhongMaterial({ color: 0x44aa88 });
-        this.cube = new Mesh(geometry, material);
-        this.cube.position.x = 0
     }
 
     public jump(deltaTime: number) {
         if(this.inputJump.actualPress == true && this.inputJump.previousPress == false) {
             if(this.fallAtributes.acceleration == 0)
-                this.cube.position.y = -3.1
+                this.mesh.position.y = -3.1
 
             this.fallAtributes.acceleration = -1 ;
-            this.cube.position.y += deltaTime * (this.fallAtributes.acceleration * this.fallAtributes.velocity)
+            this.mesh.position.y += deltaTime * (this.fallAtributes.acceleration * this.jumpVelocity)
         }
         this.inputJump.previousPress = this.inputJump.actualPress;
     }
 
     public rotate(deltaTime: number) {
-        this.cube.rotation.x += deltaTime*2;
-        this.cube.rotation.y += deltaTime*2;
+        this.mesh.rotation.x += deltaTime*2;
+        this.mesh.rotation.y += deltaTime*2;
     }
 
     public fall(deltaTime: number) {
-        if(this.cube.position.y > -3.2) {
+        if(this.mesh.position.y > -3.2) {
             this.fallAtributes.acceleration += 0.016
-            this.cube.position.y -= (deltaTime * (this.fallAtributes.acceleration * this.fallAtributes.velocity));
+            this.mesh.position.y -= (deltaTime * (this.fallAtributes.acceleration * this.fallAtributes.velocity));
         }
         else {
             this.fallAtributes.acceleration = 0;
-            this.cube.position.y = -3.2
+            this.mesh.position.y = -3.2
         }
     }
 }

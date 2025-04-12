@@ -1,4 +1,6 @@
-import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Mesh, BoxGeometry, MeshPhongMaterial, Color, Clock } from 'three'
+import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color, Clock } from 'three'
+import { Player } from '../player/Player';
+import { Pipe } from '../player/Pipe';
 
 export class Configuration {
     public canvas: Element;
@@ -67,7 +69,13 @@ export class Configuration {
         return needResize;
     }
 
-    public addPlayerToScene(player: Mesh) {
-        this.scene.add(player);
+    public addPlayerToScene(player: Player) {
+        this.scene.add(player.mesh);
+    }
+
+    public addPipesToScene(pipes: Pipe[]) {
+        pipes.forEach((pipe)=> {
+            this.scene.add(pipe.mesh);
+        })
     }
 }
