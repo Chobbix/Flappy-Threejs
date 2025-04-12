@@ -1,5 +1,5 @@
 import { MeshFactory } from "../MeshFactory";
-import { FALL_ACCELERATION, FLOOR_LIMIT, INITIAL_POSITION, JUMP_ACCELERATION } from "./PlayerConstants";
+import { FALL_ACCELERATION, FLOOR_LIMIT, INITIAL_POSITION, JUMP_ACCELERATION, JUMP_VELOCITY } from "./PlayerConstants";
 
 export class Player extends MeshFactory {
     public isAlive: boolean;
@@ -7,7 +7,6 @@ export class Player extends MeshFactory {
         actualPress: boolean,
         previousPress: boolean
     }
-    private jumpVelocity: number = 5;
 
     public fallAtributes: {
         velocity: number,
@@ -52,12 +51,13 @@ export class Player extends MeshFactory {
                 this.mesh.position.y = FLOOR_LIMIT - (-.1)
 
             this.fallAtributes.acceleration = JUMP_ACCELERATION ;
-            this.mesh.position.y += deltaTime * (this.fallAtributes.acceleration * this.jumpVelocity)
+            this.mesh.position.y += deltaTime * (this.fallAtributes.acceleration * JUMP_VELOCITY)
         }
         this.inputJump.previousPress = this.inputJump.actualPress;
     }
 
     public rotate(deltaTime: number) {
+        // this.mesh.rotation.z -= deltaTime * (this.fallAtributes.acceleration * JUMP_VELOCITY);
         this.mesh.rotation.x += deltaTime*2;
         this.mesh.rotation.y += deltaTime*2;
     }
