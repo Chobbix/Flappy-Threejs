@@ -1,5 +1,6 @@
 import { Pipe } from "./Pipe";
-import { LIMIT_NEGATIVE_POSITION, SAFE_BREACH, SPACE_BETWEEN_PIPES } from "./PipeConstants";
+import { LIMIT_BACK_COLLISION, LIMIT_FRONT_COLLISION, LIMIT_NEGATIVE_POSITION, SAFE_BREACH, SPACE_BETWEEN_PIPES } from "./PipeConstants";
+import { Player } from "./Player";
 
 export class PipeService {
     static initilizePipes() {
@@ -20,8 +21,13 @@ export class PipeService {
         return Math.random() * (2 - (-2)) + (-2)
     }
 
-    static pipesRender(deltaTime: number, pipes: Pipe[]) {
+    static render(deltaTime: number, pipes: Pipe[], player: Player) {
         pipes.forEach((pipe) => {
+            if(pipe.mesh.position.x < LIMIT_FRONT_COLLISION && pipe.mesh.position.x > LIMIT_BACK_COLLISION) {
+                if(pipe.configuration.boundingBox.intersectsBox(player.configuration.boundingBox)){
+                    player.die();
+                }
+            }
             if(pipe.mesh.position.x < LIMIT_NEGATIVE_POSITION) {
                 this.findAndRespawnWithPartner(pipes, pipe)
             }

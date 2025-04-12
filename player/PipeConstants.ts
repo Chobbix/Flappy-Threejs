@@ -4,3 +4,6 @@ export const VELOCITY = 3;
 
 export const LIMIT_NEGATIVE_POSITION = -15;
 export const SPAWN_POSITION = 10;
+
+export const LIMIT_FRONT_COLLISION = -4;
+export const LIMIT_BACK_COLLISION = -6;

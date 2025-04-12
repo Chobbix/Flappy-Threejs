@@ -1,5 +1,5 @@
 import { MeshFactory } from "./MeshFactory";
-import { FALL_ACCELERATION, FLOOR_LIMIT, JUMP_ACCELERATION } from "./PlayerConstants";
+import { FALL_ACCELERATION, FLOOR_LIMIT, INITIAL_POSITION, JUMP_ACCELERATION } from "./PlayerConstants";
 
 export class Player extends MeshFactory {
     public isAlive: boolean;
@@ -41,7 +41,7 @@ export class Player extends MeshFactory {
         });
 
         player.createPlayerMesh();
-        player.mesh.position.x = -5
+        player.mesh.position.x = INITIAL_POSITION
 
         return player;
     }
@@ -71,5 +71,14 @@ export class Player extends MeshFactory {
             this.fallAtributes.acceleration = 0;
             this.mesh.position.y = FLOOR_LIMIT
         }
+    }
+
+    public die() {
+        this.mesh.position.x = -30;
+        this.mesh.visible = false;
+    }
+
+    public updateBoundingBox() {
+        this.configuration.boundingBox.copy(this.mesh.geometry.boundingBox).applyMatrix4(this.mesh.matrixWorld)
     }
 }

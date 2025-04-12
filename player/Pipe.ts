@@ -23,6 +23,7 @@ export class Pipe extends MeshFactory {
     
     move(deltaTime: number) {
         this.mesh.position.x -= (deltaTime * this.velocity);
+        this.configuration.boundingBox.copy(this.mesh.geometry.boundingBox).applyMatrix4(this.mesh.matrixWorld)
     }
 
     respawn() {
