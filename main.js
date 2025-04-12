@@ -1,8 +1,8 @@
-import { Pipe } from './player/Pipe';
-import { SAFE_BREACH, SPACE_BETWEEN_PIPES } from './player/PipeConstants';
-import { PipeService } from './player/PipeService';
-import { Player } from './player/Player';
-import { PlayerService } from './player/PlayerService';
+import { Pipe } from './src/pipe/Pipe';
+import { SAFE_BREACH, SPACE_BETWEEN_PIPES } from './src/pipe/PipeConstants';
+import { PipeService } from './src/pipe/PipeService';
+import { Player } from './src/player/Player';
+import { PlayerService } from './src/player/PlayerService';
 import { Configuration } from './setup/Configuration';
 
 const configuration = Configuration.createDefaultConfiguration();

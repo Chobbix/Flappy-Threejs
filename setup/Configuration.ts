@@ -1,6 +1,6 @@
 import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color, Clock } from 'three'
-import { Player } from '../player/Player';
-import { Pipe } from '../player/Pipe';
+import { Player } from '../src/player/Player';
+import { Pipe } from '../src/pipe/Pipe';
 
 export class Configuration {
     public canvas: Element;

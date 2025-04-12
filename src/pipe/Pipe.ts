@@ -1,6 +1,6 @@
 import { BoxGeometry, MeshPhongMaterial } from "three";
-import { MeshFactory } from "./MeshFactory";
-import { LIMIT_NEGATIVE_POSITION, SPAWN_POSITION, VELOCITY } from "./PipeConstants";
+import { MeshFactory } from "../MeshFactory";
+import { SPAWN_POSITION, VELOCITY } from "./PipeConstants";
 
 export class Pipe extends MeshFactory {
     velocity: number;

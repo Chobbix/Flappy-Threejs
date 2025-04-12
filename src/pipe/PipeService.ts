@@ -1,6 +1,6 @@
 import { Pipe } from "./Pipe";
 import { LIMIT_BACK_COLLISION, LIMIT_FRONT_COLLISION, LIMIT_NEGATIVE_POSITION, SAFE_BREACH, SPACE_BETWEEN_PIPES } from "./PipeConstants";
-import { Player } from "./Player";
+import { Player } from "../player/Player";
 
 export class PipeService {
     static initilizePipes() {

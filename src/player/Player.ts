@@ -1,4 +1,4 @@
-import { MeshFactory } from "./MeshFactory";
+import { MeshFactory } from "../MeshFactory";
 import { FALL_ACCELERATION, FLOOR_LIMIT, INITIAL_POSITION, JUMP_ACCELERATION } from "./PlayerConstants";
 
 export class Player extends MeshFactory {
