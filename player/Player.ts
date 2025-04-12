@@ -1,4 +1,5 @@
 import { MeshFactory } from "./MeshFactory";
+import { FALL_ACCELERATION, FLOOR_LIMIT, JUMP_ACCELERATION } from "./PlayerConstants";
 
 export class Player extends MeshFactory {
     public isAlive: boolean;
@@ -48,9 +49,9 @@ export class Player extends MeshFactory {
     public jump(deltaTime: number) {
         if(this.inputJump.actualPress == true && this.inputJump.previousPress == false) {
             if(this.fallAtributes.acceleration == 0)
-                this.mesh.position.y = -3.1
+                this.mesh.position.y = FLOOR_LIMIT - (-.1)
 
-            this.fallAtributes.acceleration = -1 ;
+            this.fallAtributes.acceleration = JUMP_ACCELERATION ;
             this.mesh.position.y += deltaTime * (this.fallAtributes.acceleration * this.jumpVelocity)
         }
         this.inputJump.previousPress = this.inputJump.actualPress;
@@ -62,13 +63,13 @@ export class Player extends MeshFactory {
     }
 
     public fall(deltaTime: number) {
-        if(this.mesh.position.y > -3.2) {
-            this.fallAtributes.acceleration += 0.016
+        if(this.mesh.position.y > FLOOR_LIMIT) {
+            this.fallAtributes.acceleration += FALL_ACCELERATION
             this.mesh.position.y -= (deltaTime * (this.fallAtributes.acceleration * this.fallAtributes.velocity));
         }
         else {
             this.fallAtributes.acceleration = 0;
-            this.mesh.position.y = -3.2
+            this.mesh.position.y = FLOOR_LIMIT
         }
     }
 }

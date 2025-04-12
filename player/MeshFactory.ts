@@ -13,7 +13,7 @@ export class MeshFactory {
                 geometry: null,
                 material: null
             }
-            this.configuration.geometry = new BoxGeometry(.5, 4, .5);
+            this.configuration.geometry = new BoxGeometry(.5, 5, .5);
             this.configuration.material = new MeshPhongMaterial({ color: 0x44aa88 });
         }
         else
