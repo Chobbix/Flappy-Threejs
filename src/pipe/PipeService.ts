@@ -1,16 +1,19 @@
 import { Pipe } from "./Pipe";
-import { LIMIT_BACK_COLLISION, LIMIT_FRONT_COLLISION, LIMIT_NEGATIVE_POSITION, SAFE_BREACH, SPACE_BETWEEN_PIPES } from "./PipeConstants";
+import { LIMIT_BACK_COLLISION, LIMIT_FRONT_COLLISION, LIMIT_NEGATIVE_POSITION, LIMIT_UP_COLLISION, SAFE_BREACH, SPACE_BETWEEN_PIPES } from "./PipeConstants";
 import { Player } from "../player/Player";
+import { BoxGeometry, MeshPhongMaterial } from "three";
 
 export class PipeService {
     static initilizePipes() {
         const pipeTemplate = Pipe.initializePipe(0, null, null);
+        const pipeScoreTemplate = Pipe.initializeScorePipe(0, null, null);
         var pipes = [];
 
         for(let i = 0; i < 5; i++) {
             let yPosition = this.generateRandomPosition()
             let xPosition = (i+1) * SPACE_BETWEEN_PIPES; 
             pipes.push(Pipe.initializePipe(i, pipeTemplate.configuration, { x: xPosition, y: (-SAFE_BREACH) + (yPosition) }))
+            pipes.push(Pipe.initializeScorePipe(i, pipeScoreTemplate.configuration, { x: xPosition, y: (yPosition) }))
             pipes.push(Pipe.initializePipe(i, pipeTemplate.configuration, { x: xPosition, y: ( SAFE_BREACH) + (yPosition) }))
         }
 
@@ -23,9 +26,13 @@ export class PipeService {
 
     static render(deltaTime: number, pipes: Pipe[], player: Player) {
         pipes.forEach((pipe) => {
-            if(pipe.mesh.position.x < LIMIT_FRONT_COLLISION && pipe.mesh.position.x > LIMIT_BACK_COLLISION) {
-                if(pipe.configuration.boundingBox.intersectsBox(player.configuration.boundingBox)){
+            if(pipe.mesh.position.x < LIMIT_FRONT_COLLISION && pipe.mesh.position.x > LIMIT_BACK_COLLISION && pipe.mesh.position.y < LIMIT_UP_COLLISION) {
+                if(pipe.isScorePipe == false && pipe.configuration.boundingBox.intersectsBox(player.configuration.boundingBox) == true)
                     player.die();
+
+                else if(pipe.isScorePipe == true && pipe.configuration.boundingBox.intersectsBox(player.configuration.boundingBox) == true) {
+                    pipe.remove();
+                    player.score();
                 }
             }
             if(pipe.mesh.position.x < LIMIT_NEGATIVE_POSITION) {
@@ -37,12 +44,15 @@ export class PipeService {
     }
 
     static findAndRespawnWithPartner(pipes: Pipe[], pipe: Pipe) {
-        const pipePartner = pipes.find((e) => e.id == pipe.id && e.mesh.position.y != pipe.mesh.position.y)
+        const pipePartner = pipes.find((e) => e.id == pipe.id && e.mesh.position.y != pipe.mesh.position.y && pipe.isScorePipe == false)
+        const pipeScore = pipes.find((e) => e.id == pipe.id && e.isScorePipe == true)
         let yPosition = this.generateRandomPosition();
 
         pipePartner.mesh.position.y = (-SAFE_BREACH) + (yPosition)
         pipePartner.respawn()
         pipe.mesh.position.y = ( SAFE_BREACH) + (yPosition)
         pipe.respawn()
+        pipeScore.mesh.position.y = (yPosition)
+        pipeScore.respawn()
     }
 }

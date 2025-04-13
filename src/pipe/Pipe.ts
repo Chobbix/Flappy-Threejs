@@ -1,6 +1,6 @@
 import { BoxGeometry, MeshPhongMaterial } from "three";
 import { MeshFactory } from "../MeshFactory";
-import { SPAWN_POSITION, VELOCITY } from "./PipeConstants";
+import { SPAWN_X_POSITION, VELOCITY } from "./PipeConstants";
 
 export class Pipe extends MeshFactory {
     velocity: number;
@@ -9,6 +9,7 @@ export class Pipe extends MeshFactory {
         x: number,
         y: number
     };
+    isScorePipe: boolean;
 
     static initializePipe(id: number, configuration: { geometry: BoxGeometry, material: MeshPhongMaterial }, spawnPosition: { x: number, y: number }) {
         const pipe = new Pipe();
@@ -18,6 +19,17 @@ export class Pipe extends MeshFactory {
         pipe.mesh.position.y = spawnPosition != null ? spawnPosition.y : 0;
         pipe.velocity = VELOCITY;
         pipe.id = id;
+        pipe.isScorePipe = false;
+        return pipe;
+    }
+
+    static initializeScorePipe(id: number, configuration: { geometry: BoxGeometry, material: MeshPhongMaterial }, spawnPosition: { x: number, y: number }) {
+        if(configuration == null)
+            configuration = { geometry: new BoxGeometry(.025, 1.9, .5), material: new MeshPhongMaterial({ color: 0xff0000 }) };
+
+        const pipe = this.initializePipe(id, configuration, spawnPosition);
+        pipe.isScorePipe = true;
+        pipe.mesh.visible = false;
         return pipe;
     }
     
@@ -27,6 +39,11 @@ export class Pipe extends MeshFactory {
     }
 
     respawn() {
-        this.mesh.position.x = SPAWN_POSITION;
+        this.mesh.position.x = SPAWN_X_POSITION;
+    }
+
+    remove() {
+        this.mesh.position.y += 10;
+        this.configuration.boundingBox.copy(this.mesh.geometry.boundingBox).applyMatrix4(this.mesh.matrixWorld)
     }
 } 

@@ -7,15 +7,16 @@ export class Player extends MeshFactory {
         actualPress: boolean,
         previousPress: boolean
     }
-
     public fallAtributes: {
         velocity: number,
         acceleration: number
     }
+    public scorePoints: number
 
     static initializePlayer() {
         const player = new Player();
         player.isAlive = true;
+        player.scorePoints = 0;
         player.inputJump = {
             actualPress: false,
             previousPress: false
@@ -76,6 +77,10 @@ export class Player extends MeshFactory {
     public die() {
         this.mesh.position.x = -30;
         this.mesh.visible = false;
+    }
+
+    public score() {
+        this.scorePoints++;
     }
 
     public updateBoundingBox() {

@@ -4,6 +4,7 @@ import { Pipe } from '../src/pipe/Pipe';
 
 export class Configuration {
     public canvas: Element;
+    public score: Element;
     public renderer: WebGLRenderer;
     public scene: Scene;
     public camera: PerspectiveCamera;
@@ -12,7 +13,8 @@ export class Configuration {
 
     static createDefaultConfiguration() {
         const configuration = new Configuration();
-        configuration.createCanvas('#c');
+        configuration.createCanvas('#canva');
+        configuration.createScoreAttachment('#score')
         configuration.createRenderer();
         configuration.createScene();
         configuration.createCamera();
@@ -25,6 +27,10 @@ export class Configuration {
 
     private createCanvas(id: string) {
         this.canvas = document.querySelector(id);
+    }
+
+    private createScoreAttachment(id: string) {
+        this.score = document.querySelector(id);
     }
 
     private createRenderer() {
@@ -77,5 +83,9 @@ export class Configuration {
         pipes.forEach((pipe)=> {
             this.scene.add(pipe.mesh);
         })
+    }
+
+    public updateScore(player: Player) {
+        this.score.textContent = player.scorePoints.toString();
     }
 }

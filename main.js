@@ -1,5 +1,3 @@
-import { Pipe } from './src/pipe/Pipe';
-import { SAFE_BREACH, SPACE_BETWEEN_PIPES } from './src/pipe/PipeConstants';
 import { PipeService } from './src/pipe/PipeService';
 import { Player } from './src/player/Player';
 import { PlayerService } from './src/player/PlayerService';
@@ -15,9 +13,10 @@ configuration.addPipesToScene(pipes)
 function render(time) {
     const deltaTime = configuration.clock.getDelta()
 
-    PlayerService.render(deltaTime, player);
     PipeService.render(deltaTime, pipes, player);
+    PlayerService.render(deltaTime, player);
 
+    configuration.updateScore(player);
     configuration.resizeRendererToDisplaySize();
     configuration.renderer.render(configuration.scene, configuration.camera);
     requestAnimationFrame(render);
