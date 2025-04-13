@@ -15,6 +15,7 @@ export class Configuration {
         const configuration = new Configuration();
         configuration.createCanvas('#canva');
         configuration.createScoreAttachment('#score')
+        configuration.createReloadButton();
         configuration.createRenderer();
         configuration.createScene();
         configuration.createCamera();
@@ -87,5 +88,14 @@ export class Configuration {
 
     public updateScore(player: Player) {
         this.score.textContent = player.scorePoints.toString();
+    }
+    
+    public createReloadButton() {
+        document.addEventListener('keypress', (e) => {
+            switch(e.code) {
+                case 'KeyR':
+                    location.reload();
+            }
+        });
     }
 }
