@@ -14,11 +14,11 @@ function render(time) {
     const deltaTime = configuration.clock.getDelta()
 
     PipeService.render(deltaTime, pipes, player);
-    PlayerService.render(deltaTime, player);
+    PlayerService.render(deltaTime, player, configuration);
 
     configuration.updateScore(player);
     configuration.resizeRendererToDisplaySize();
-    configuration.renderer.render(configuration.scene, configuration.camera);
+    configuration.renderer.render(configuration.scene, configuration.renderCamera());
     requestAnimationFrame(render);
 }
 requestAnimationFrame(render);

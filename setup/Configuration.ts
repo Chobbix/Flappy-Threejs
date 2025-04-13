@@ -1,13 +1,14 @@
-import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color, Clock } from 'three'
+import { WebGLRenderer, Scene, PerspectiveCamera, DirectionalLight, Color, Clock, OrthographicCamera, Camera } from 'three'
 import { Player } from '../src/player/Player';
 import { Pipe } from '../src/pipe/Pipe';
+import { CameraInterface } from './CameraInterface';
 
 export class Configuration {
     public canvas: Element;
     public score: Element;
     public renderer: WebGLRenderer;
     public scene: Scene;
-    public camera: PerspectiveCamera;
+    public cameras: Map<number,CameraInterface>;
     public light: DirectionalLight;
     public clock: Clock;
 
@@ -18,7 +19,7 @@ export class Configuration {
         configuration.createReloadButton();
         configuration.createRenderer();
         configuration.createScene();
-        configuration.createCamera();
+        configuration.createCameras();
         configuration.createLight();
         configuration.createClock();
 
@@ -47,10 +48,45 @@ export class Configuration {
         this.scene.background = new Color('lightblue');
     }
 
-    private createCamera() {
+    private createCameras() {
         var visibleSize = { width: window.innerWidth, height: window.innerHeight};
-        this.camera = new PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 100);
-        this.camera.position.z = 5;
+        this.cameras = new Map();
+        this.cameras.set(1, {
+            isActive: true,
+            camera: new PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 100)
+        });
+        this.cameras.set(2, {
+            isActive: false,
+            camera: new OrthographicCamera(visibleSize.width / - 250, visibleSize.width / 250, visibleSize.height / 250, visibleSize.height / - 250, 1, 1000 )
+        });
+
+        this.cameras.forEach(element => {
+            element.camera.position.z = 5;
+        });
+        // console.log(this.cameras)
+        
+        document.addEventListener('keypress', (e) => {
+            switch(e.code) {
+                case 'Digit1':{
+                    if(this.cameras.get(1).isActive != true) {
+                        this.cameras.forEach(element => {
+                            if(element.isActive == true) element.isActive = false;
+                        });
+                        this.cameras.get(1).isActive = true;
+                    }
+                }
+                break;
+                case 'Digit2':{
+                    if(this.cameras.get(2).isActive != true) {
+                        this.cameras.forEach(element => {
+                            if(element.isActive == true) element.isActive = false;
+                        });
+                        this.cameras.get(2).isActive = true;
+                    }
+                }
+                break;
+            }
+        });
     }
 
     private createLight() {
@@ -70,8 +106,10 @@ export class Configuration {
         const needResize = canvas.width !== width || canvas.height !== height;
         if (needResize) {
             this.renderer.setSize(width, height, false);
-            this.camera.aspect = canvas.clientWidth / canvas.clientHeight;
-            this.camera.updateProjectionMatrix();
+            if(this.cameras.get(1).isActive == true) {
+                const perspectiveCamera = this.cameras.get(1).camera as PerspectiveCamera
+                perspectiveCamera.updateProjectionMatrix();
+            }
         }
         return needResize;
     }
@@ -97,5 +135,13 @@ export class Configuration {
                     location.reload();
             }
         });
+    }
+    
+    public renderCamera() {
+        let camera: Camera = null 
+        this.cameras.forEach(element => {
+            if(element.isActive == true) camera = element.camera;
+        });
+        return camera;
     }
 }
