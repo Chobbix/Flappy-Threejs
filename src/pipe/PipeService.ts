@@ -5,16 +5,16 @@ import { BoxGeometry, MeshPhongMaterial } from "three";
 
 export class PipeService {
     static initilizePipes() {
-        const pipeTemplate = Pipe.initializePipe(0, null, null);
-        const pipeScoreTemplate = Pipe.initializeScorePipe(0, null, null);
+        const pipeTemplate = Pipe.initializePipe(0, null, null, null);
+        const pipeScoreTemplate = Pipe.initializeScorePipe(0, null, null, null);
         var pipes = [];
 
         for(let i = 0; i < 5; i++) {
             let yPosition = this.generateRandomPosition()
             let xPosition = (i+1) * SPACE_BETWEEN_PIPES; 
-            pipes.push(Pipe.initializePipe(i, pipeTemplate.configuration, { x: xPosition, y: (-SAFE_BREACH) + (yPosition) }))
-            pipes.push(Pipe.initializeScorePipe(i, pipeScoreTemplate.configuration, { x: xPosition, y: (yPosition) }))
-            pipes.push(Pipe.initializePipe(i, pipeTemplate.configuration, { x: xPosition, y: ( SAFE_BREACH) + (yPosition) }))
+            pipes.push(Pipe.initializePipe(i, pipeTemplate.configuration, { x: xPosition, y: (-SAFE_BREACH) + (yPosition) }, 'down'))
+            pipes.push(Pipe.initializeScorePipe(i, pipeScoreTemplate.configuration, { x: xPosition, y: (yPosition) }, 'score'))
+            pipes.push(Pipe.initializePipe(i, pipeTemplate.configuration, { x: xPosition, y: ( SAFE_BREACH) + (yPosition) }, 'up'))
         }
 
         return pipes;
@@ -48,11 +48,11 @@ export class PipeService {
         const pipeScore = pipes.find((e) => e.id == pipe.id && e.isScorePipe == true)
         let yPosition = this.generateRandomPosition();
 
-        pipePartner.mesh.position.y = (-SAFE_BREACH) + (yPosition)
-        pipePartner.respawn()
-        pipe.mesh.position.y = ( SAFE_BREACH) + (yPosition)
-        pipe.respawn()
-        pipeScore.mesh.position.y = (yPosition)
-        pipeScore.respawn()
+        if(pipePartner != null) pipePartner.mesh.position.y = (-SAFE_BREACH) + (yPosition)
+        if(pipePartner != null) pipePartner.respawn()
+        if(pipe != null) pipe.mesh.position.y = ( SAFE_BREACH) + (yPosition)
+        if(pipe != null) pipe.respawn()
+        if(pipeScore != null) pipeScore.mesh.position.y = (yPosition)
+        if(pipeScore != null) pipeScore.respawn()
     }
 }

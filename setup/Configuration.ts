@@ -49,21 +49,26 @@ export class Configuration {
     }
 
     private createCameras() {
+        var cameraSaved = localStorage.getItem('camera');
+        if(cameraSaved == null) {
+            localStorage.setItem('camera', '1');
+            cameraSaved = '1';
+        }
+
         var visibleSize = { width: window.innerWidth, height: window.innerHeight};
         this.cameras = new Map();
         this.cameras.set(1, {
-            isActive: true,
+            isActive: cameraSaved == '1' ? true : false,
             camera: new PerspectiveCamera(75, visibleSize.width / visibleSize.height, 0.1, 100)
         });
         this.cameras.set(2, {
-            isActive: false,
+            isActive: cameraSaved == '2' ? true : false,
             camera: new OrthographicCamera(visibleSize.width / - 250, visibleSize.width / 250, visibleSize.height / 250, visibleSize.height / - 250, 1, 1000 )
         });
 
         this.cameras.forEach(element => {
             element.camera.position.z = 5;
         });
-        // console.log(this.cameras)
         
         document.addEventListener('keypress', (e) => {
             switch(e.code) {
@@ -73,6 +78,7 @@ export class Configuration {
                             if(element.isActive == true) element.isActive = false;
                         });
                         this.cameras.get(1).isActive = true;
+                        localStorage.setItem('camera', '1');
                     }
                 }
                 break;
@@ -82,6 +88,7 @@ export class Configuration {
                             if(element.isActive == true) element.isActive = false;
                         });
                         this.cameras.get(2).isActive = true;
+                        localStorage.setItem('camera', '2');
                     }
                 }
                 break;

@@ -7,4 +7,4 @@ export const SPAWN_X_POSITION = 10;
 
 export const LIMIT_FRONT_COLLISION = -4;
 export const LIMIT_BACK_COLLISION = -6;
-export const LIMIT_UP_COLLISION = 3;
+export const LIMIT_UP_COLLISION = 10;
